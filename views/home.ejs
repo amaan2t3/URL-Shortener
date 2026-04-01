@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL-Shortner</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Verdana, Tahoma, sans-serif;
+            background-color: #f9f9f9;
+            padding: 10px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 10px;
+        }
+
+        h1 {
+            color: #333;
+            font-size: 2rem;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .navbar {
+            background-color: #333;
+            padding: 12px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 16px;
+            background-color: #007bff;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-size: 0.9rem;
+            white-space: nowrap;
+        }
+
+        .navbar a:hover {
+            background-color: #0056b3;
+        }
+
+        .navbar .home {
+            background-color: #28a745;
+        }
+
+        .navbar .home:hover {
+            background-color: #218838;
+        }
+
+        form {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            max-width: 100%;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            max-width: 400px;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+            width: 100%;
+            max-width: 200px;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        .short-url-box {
+            background-color: #e7f3ff;
+            border: 1px solid #b3d9ff;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .short-url-box p {
+            color: #004085;
+            word-break: break-all;
+        }
+
+        .table-wrapper {
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            overflow-x: auto;
+            padding: 15px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tr:hover {
+            background-color: #f0f0f0;
+        }
+
+        h2 {
+            color: #333;
+            margin: 30px 0 20px 0;
+            font-size: 1.5rem;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            body {
+                padding: 5px;
+            }
+
+            .container {
+                padding: 0 5px;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+                margin: 15px 0;
+            }
+
+            h2 {
+                font-size: 1.2rem;
+                margin: 20px 0 15px 0;
+            }
+
+            .navbar {
+                padding: 10px;
+                gap: 6px;
+                justify-content: flex-start;
+                overflow-x: auto;
+            }
+
+            .navbar a {
+                padding: 8px 12px;
+                font-size: 0.8rem;
+            }
+
+            form {
+                padding: 15px;
+                margin-bottom: 15px;
+            }
+
+            form label {
+                font-size: 0.95rem;
+            }
+
+            input[type="text"] {
+                max-width: 100%;
+                padding: 8px;
+                font-size: 0.95rem;
+            }
+
+            button {
+                padding: 8px 15px;
+                font-size: 0.95rem;
+                max-width: 100%;
+            }
+
+            .table-wrapper {
+                padding: 10px;
+                border-radius: 4px;
+            }
+
+            table {
+                font-size: 0.85rem;
+            }
+
+            th,
+            td {
+                padding: 8px;
+            }
+        }
+
+        /* Extra small devices */
+        @media (max-width: 480px) {
+            body {
+                padding: 5px;
+            }
+
+            h1 {
+                font-size: 1.3rem;
+                margin: 10px 0;
+            }
+
+            .navbar {
+                padding: 8px;
+                gap: 4px;
+            }
+
+            .navbar a {
+                padding: 6px 10px;
+                font-size: 0.75rem;
+            }
+
+            form {
+                padding: 12px;
+            }
+
+            label {
+                font-size: 0.9rem;
+            }
+
+            input[type="text"] {
+                padding: 8px 6px;
+                font-size: 16px;
+            }
+
+            button {
+                padding: 10px 15px;
+                font-size: 0.9rem;
+            }
+
+            h2 {
+                font-size: 1rem;
+            }
+
+            table {
+                font-size: 0.75rem;
+            }
+
+            th,
+            td {
+                padding: 6px 4px;
+            }
+
+            .short-url-box {
+                padding: 10px;
+                margin-bottom: 15px;
+            }
+
+            .short-url-box p {
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="navbar">
+        <a href="/" class="home">🏠 Home</a>
+        <a href="/login">🔐 Login</a>
+        <a href="/signup">📝 Signup</a>
+    </div>
+
+    <div class="container">
+        <h1>URL Shortener</h1>
+
+        <% if (locals.id) { %>
+            <div class="short-url-box">
+                <p><strong>Short URL:</strong></p>
+                <p>http://localhost:8000/url/<%= id %>
+                </p>
+            </div>
+            <% } %>
+
+                <div>
+                    <form method="POST" action="/url">
+                        <label for="url">Enter Your Original URL:</label>
+                        <input type="text" id="url" name="url" required placeholder="https://example.com">
+                        <button type="submit">Generate Short URL</button>
+                    </form>
+                </div>
+
+                <% if (locals.urls) { %>
+                    <h2>Generated URLs</h2>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>S.No</th>
+                                    <th>ShortID</th>
+                                    <th>RedirectURL</th>
+                                    <th>VisitHistory</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% urls.forEach((url , index)=> { %>
+                                    <tr>
+                                        <td>
+                                            <%= index + 1 %>
+                                        </td>
+                                        <td>
+                                            <%= url.shortID %>
+                                        </td>
+                                        <td>
+                                            <%= url.redirectURL %>
+                                        </td>
+                                        <td>
+                                            <%= url.visitHistory.length %>
+                                        </td>
+                                    </tr>
+                                    <% }) %>
+                            </tbody>
+                        </table>
+                    </div>
+                    <% } %>
+    </div>
+</body>
+
+</html>
