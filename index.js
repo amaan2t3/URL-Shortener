@@ -1,13 +1,14 @@
+require("dotenv").config();
 ////////////////// Expresss
 const express = require("express");
 const app = express();
-const PORT = 8000;
+const PORT = process.env.PORT || 8000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 /////////////////////////// Connect MongoDB
 const { connectToMongoDB } = require("./connectMD");
-connectToMongoDB("mongodb://127.0.0.1:27017/short-url").then(() =>
+connectToMongoDB(process.env.MONGODB_URI).then(() =>
     console.log("Mongodb Connected"),
 );
 // Import URL Model
