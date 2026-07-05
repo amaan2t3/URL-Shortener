@@ -33,10 +33,15 @@ const createUrlLimiter = rateLimit({
 const { restrictToLoginUserOnly, checkUserLogin } = require("./middlewares/auth");
 
 app.set("view engine", "ejs");
-app.set("views", path.resolve("./views"));
+app.set("views", path.join(__dirname, "views"));
 
 app.use("/", checkUserLogin, staticRouter);
 app.use("/url", restrictToLoginUserOnly, createUrlLimiter, urlRoute);
 app.use("/user", userRoute);
 
-app.listen(PORT, () => console.log(`Server Started at PORT:${PORT}`));
+// Only listen locally, Vercel will use the exported app
+if (process.env.NODE_ENV !== 'production') {
+    app.listen(PORT, () => console.log(`Server Started at PORT:${PORT}`));
+}
+
+module.exports = app;
