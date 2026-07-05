@@ -1,140 +1,269 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>URL-Shortner</title>
+    <title>URL Shortener | Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        :root[data-theme="light"] {
+            --bg-color: #FFF9F3;
+            --text-color: #3B3B3B;
+            --text-muted: #6B7280;
+            --card-bg: #FFFFFF;
+            --card-border: #ECECEC;
+            --primary: #4CAF50;
+            --primary-hover: #43A047;
+            --secondary: #FFB26B;
+            --accent: #FFD166;
+            --navbar-bg: rgba(255, 255, 255, 0.9);
+            --input-bg: #FFFFFF;
+            --input-text: #3B3B3B;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --error: #EF4444;
+        }
+
+        :root[data-theme="dark"] {
+            --bg-color: #0f172a;
+            --text-color: #f8fafc;
+            --text-muted: #94a3b8;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --card-border: rgba(255, 255, 255, 0.1);
+            --primary: #4CAF50;
+            --primary-hover: #43A047;
+            --secondary: #FFB26B;
+            --accent: #FFD166;
+            --navbar-bg: rgba(15, 23, 42, 0.8);
+            --input-bg: rgba(15, 23, 42, 0.6);
+            --input-text: #f8fafc;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --error: #EF4444;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
         }
 
         body {
-            font-family: Verdana, Tahoma, sans-serif;
-            background-color: #f9f9f9;
-            padding: 10px;
+            background-color: var(--bg-color);
+            color: var(--text-color);
             min-height: 100vh;
+            background-image: 
+                radial-gradient(circle at 15% 50%, rgba(76, 175, 80, 0.1), transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(255, 178, 107, 0.1), transparent 25%);
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 10px;
-        }
-
-        h1 {
-            color: #333;
-            font-size: 2rem;
-            margin: 20px 0;
-            text-align: center;
-        }
-
+        /* Navbar */
         .navbar {
-            background-color: #333;
-            padding: 12px;
-            margin-bottom: 20px;
-            border-radius: 4px;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background-color: var(--navbar-bg);
+            backdrop-filter: blur(12px);
+            padding: 15px 30px;
             display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            align-items: center;
             justify-content: center;
+            gap: 15px;
+            border-bottom: 1px solid var(--card-border);
         }
 
         .navbar a {
-            color: white;
+            color: var(--text-color);
             text-decoration: none;
-            padding: 10px 16px;
-            background-color: #007bff;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            font-size: 0.9rem;
-            white-space: nowrap;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.2s;
+            background: rgba(128, 128, 128, 0.1);
         }
 
         .navbar a:hover {
-            background-color: #0056b3;
+            background: rgba(128, 128, 128, 0.2);
+            transform: translateY(-2px);
         }
 
-        .navbar .home {
-            background-color: #28a745;
+        /* Container & Hero */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
-        .navbar .home:hover {
-            background-color: #218838;
+        h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: fadeInDown 0.8s ease-out;
         }
 
-        form {
-            background-color: white;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        p.subtitle {
+            text-align: center;
+            color: var(--text-color);
+            opacity: 0.8;
+            margin-bottom: 40px;
+            font-size: 1.1rem;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        /* Glassmorphic Form */
+        .glass-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            padding: 30px;
+            width: 100%;
+            max-width: 600px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            animation: zoomIn 0.6s ease-out;
+            margin-bottom: 40px;
+        }
+
+        .form-group {
             margin-bottom: 20px;
-            max-width: 100%;
         }
 
         label {
             display: block;
             margin-bottom: 8px;
-            font-weight: bold;
-            color: #333;
+            font-weight: 500;
+            font-size: 0.95rem;
+            opacity: 0.9;
         }
 
-        input[type="text"] {
+        input {
             width: 100%;
-            max-width: 400px;
-            padding: 10px;
-            margin-bottom: 15px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
+            padding: 14px 16px;
+            border-radius: 12px;
+            border: 1px solid var(--card-border);
+            background-color: var(--input-bg);
+            color: var(--input-text);
             font-size: 1rem;
+            outline: none;
+            transition: all 0.3s;
         }
 
-        button {
-            padding: 10px 20px;
-            background-color: #28a745;
-            color: white;
+        input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        }
+
+        button.btn-primary {
+            width: 100%;
+            padding: 14px;
+            border-radius: 12px;
             border: none;
-            border-radius: 4px;
+            background: var(--primary);
+            color: white;
+            font-size: 1.05rem;
+            font-weight: 600;
             cursor: pointer;
-            font-size: 1rem;
-            transition: background-color 0.3s;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+        }
+
+        button.btn-primary:hover {
+            background: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.6);
+        }
+
+        /* QR Code & Result Box */
+        .result-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px dashed var(--primary);
+            padding: 20px;
+            border-radius: 16px;
+            margin-top: 20px;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .result-box img {
+            border-radius: 12px;
+            margin: 15px 0;
+            width: 160px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .short-url {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--primary);
+            text-decoration: none;
+            margin-bottom: 10px;
+        }
+
+        /* Theme Toggle */
+        .theme-toggle {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            padding: 12px;
+            border-radius: 50%;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            z-index: 100;
+            color: var(--text-color);
+            font-size: 1.2rem;
+        }
+
+        /* Toast Notifications */
+        .toast-container {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .toast {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border-left: 4px solid #10b981; /* Success green */
+            color: var(--text-color);
+            padding: 16px 24px;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            animation: slideInRight 0.3s ease-out forwards;
+            opacity: 0;
+            transform: translateX(-100%);
+        }
+
+        .toast.error {
+            border-left-color: #ef4444; /* Error red */
+        }
+
+        /* Table Skeletons & Styles */
+        .table-container {
             width: 100%;
-            max-width: 200px;
-        }
-
-        button:hover {
-            background-color: #218838;
-        }
-
-        button:active {
-            transform: scale(0.98);
-        }
-
-        .short-url-box {
-            background-color: #e7f3ff;
-            border: 1px solid #b3d9ff;
-            padding: 15px;
-            border-radius: 4px;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        .short-url-box p {
-            color: #004085;
-            word-break: break-all;
-        }
-
-        .table-wrapper {
-            background-color: white;
-            border-radius: 5px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            overflow-x: auto;
-            padding: 15px;
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
         }
 
         table {
@@ -142,224 +271,210 @@
             border-collapse: collapse;
         }
 
-        th,
-        td {
-            border: 1px solid #ddd;
-            padding: 12px;
+        th, td {
+            padding: 16px;
             text-align: left;
+            border-bottom: 1px solid var(--card-border);
         }
 
         th {
-            background-color: #f2f2f2;
-            font-weight: bold;
+            background: rgba(0,0,0,0.05);
+            font-weight: 600;
         }
 
-        tr:nth-child(even) {
-            background-color: #f9f9f9;
+        /* Loading Skeleton Animation */
+        .skeleton {
+            background: linear-gradient(90deg, rgba(255,255,255,0.05) 25%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.05) 75%);
+            background-size: 200% 100%;
+            animation: skeletonLoading 1.5s infinite;
+            border-radius: 4px;
+            height: 20px;
+            width: 100%;
+            display: none; /* hidden by default */
         }
 
-        tr:hover {
-            background-color: #f0f0f0;
-        }
+        .loading .skeleton { display: block; }
+        .loading .real-data { display: none; }
 
-        h2 {
-            color: #333;
-            margin: 30px 0 20px 0;
-            font-size: 1.5rem;
-        }
+        /* Animations */
+        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes zoomIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideInRight { to { opacity: 1; transform: translateX(0); } }
+        @keyframes skeletonLoading { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
 
-        /* Mobile Responsive */
-        @media (max-width: 768px) {
-            body {
-                padding: 5px;
-            }
-
-            .container {
-                padding: 0 5px;
-            }
-
-            h1 {
-                font-size: 1.5rem;
-                margin: 15px 0;
-            }
-
-            h2 {
-                font-size: 1.2rem;
-                margin: 20px 0 15px 0;
-            }
-
-            .navbar {
-                padding: 10px;
-                gap: 6px;
-                justify-content: flex-start;
-                overflow-x: auto;
-            }
-
-            .navbar a {
-                padding: 8px 12px;
-                font-size: 0.8rem;
-            }
-
-            form {
-                padding: 15px;
-                margin-bottom: 15px;
-            }
-
-            form label {
-                font-size: 0.95rem;
-            }
-
-            input[type="text"] {
-                max-width: 100%;
-                padding: 8px;
-                font-size: 0.95rem;
-            }
-
-            button {
-                padding: 8px 15px;
-                font-size: 0.95rem;
-                max-width: 100%;
-            }
-
-            .table-wrapper {
-                padding: 10px;
-                border-radius: 4px;
-            }
-
-            table {
-                font-size: 0.85rem;
-            }
-
-            th,
-            td {
-                padding: 8px;
-            }
-        }
-
-        /* Extra small devices */
-        @media (max-width: 480px) {
-            body {
-                padding: 5px;
-            }
-
-            h1 {
-                font-size: 1.3rem;
-                margin: 10px 0;
-            }
-
-            .navbar {
-                padding: 8px;
-                gap: 4px;
-            }
-
-            .navbar a {
-                padding: 6px 10px;
-                font-size: 0.75rem;
-            }
-
-            form {
-                padding: 12px;
-            }
-
-            label {
-                font-size: 0.9rem;
-            }
-
-            input[type="text"] {
-                padding: 8px 6px;
-                font-size: 16px;
-            }
-
-            button {
-                padding: 10px 15px;
-                font-size: 0.9rem;
-            }
-
-            h2 {
-                font-size: 1rem;
-            }
-
-            table {
-                font-size: 0.75rem;
-            }
-
-            th,
-            td {
-                padding: 6px 4px;
-            }
-
-            .short-url-box {
-                padding: 10px;
-                margin-bottom: 15px;
-            }
-
-            .short-url-box p {
-                font-size: 0.85rem;
-            }
-        }
     </style>
 </head>
-
 <body>
+
+    <!-- Navigation -->
     <div class="navbar">
-        <a href="/" class="home">🏠 Home</a>
+        <a href="/">🏠 Home</a>
         <a href="/login">🔐 Login</a>
         <a href="/signup">📝 Signup</a>
     </div>
 
     <div class="container">
-        <h1>URL Shortener</h1>
+        <h1>Simplify Your Links</h1>
+        <p class="subtitle">Create powerful, trackable short URLs with custom aliases and QR codes instantly.</p>
 
-        <% if (locals.id) { %>
-            <div class="short-url-box">
-                <p><strong>Short URL:</strong></p>
-                <p>http://localhost:8001/url/<%= id %>
-                </p>
-            </div>
-            <% } %>
-
-                <div>
-                    <form method="POST" action="/url">
-                        <label for="url">Enter Your Original URL:</label>
-                        <input type="text" id="url" name="url" required placeholder="https://example.com">
-                        <button type="submit">Generate Short URL</button>
-                    </form>
+        <!-- Glass Form -->
+        <div class="glass-card">
+            <form id="urlForm" method="POST" action="/url">
+                <div class="form-group">
+                    <label for="url">Destination URL <span style="color:#ef4444">*</span></label>
+                    <input type="url" id="url" name="url" required placeholder="https://example.com/very/long/url">
                 </div>
+                <div class="form-group">
+                    <label for="customAlias">Custom Alias (Optional)</label>
+                    <input type="text" id="customAlias" name="customAlias" placeholder="e.g. my-portfolio">
+                </div>
+                <button type="submit" id="submitBtn" class="btn-primary">Generate Short URL</button>
+            </form>
 
-                <% if (locals.urls) { %>
-                    <h2>Generated URLs</h2>
-                    <div class="table-wrapper">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>S.No</th>
-                                    <th>ShortID</th>
-                                    <th>RedirectURL</th>
-                                    <th>VisitHistory</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <% urls.forEach((url , index)=> { %>
-                                    <tr>
-                                        <td>
-                                            <%= index + 1 %>
-                                        </td>
-                                        <td>
-                                            <%= url.shortID %>
-                                        </td>
-                                        <td>
-                                            <%= url.redirectURL %>
-                                        </td>
-                                        <td>
-                                            <%= url.visitHistory.length %>
-                                        </td>
-                                    </tr>
-                                    <% }) %>
-                            </tbody>
-                        </table>
-                    </div>
+            <!-- Result Box (Injected from server render) -->
+            <% if (locals.id) { %>
+                <div class="result-box">
+                    <p style="font-size:0.9rem; opacity:0.8; margin-bottom:5px;">Your Short URL is ready!</p>
+                    <a href="http://localhost:8001/url/<%= id %>" target="_blank" class="short-url">localhost:8001/url/<%= id %></a>
+                    
+                    <% if (locals.qrCode) { %>
+                        <img src="<%= qrCode %>" alt="QR Code">
+                        <a href="<%= qrCode %>" download="qrcode-<%= id %>.png" style="color:var(--primary); text-decoration:none; font-size:0.9rem; font-weight:600;">⬇ Download QR Code</a>
                     <% } %>
-    </div>
-</body>
+                </div>
+            <% } %>
+            
+            <% if (locals.error) { %>
+                <div style="color:#ef4444; margin-top:15px; text-align:center; font-weight:500;">
+                    <%= error %>
+                </div>
+            <% } %>
+        </div>
 
+        <!-- Links Table -->
+        <% if (locals.urls && urls.length > 0) { %>
+            <h2 style="margin-bottom: 20px; align-self: flex-start;">Your Recent Links</h2>
+            <div class="table-container">
+                <table id="linksTable">
+                    <thead>
+                        <tr>
+                            <th>Short Alias</th>
+                            <th>Original URL</th>
+                            <th>Total Clicks</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% urls.forEach(url => { %>
+                            <tr>
+                                <td><a href="/url/<%= url.shortID %>" style="color:var(--primary)"><%= url.shortID %></a></td>
+                                <td style="max-width: 300px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><%= url.redirectURL %></td>
+                                <td><%= url.visitHistory ? url.visitHistory.length : 0 %></td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+            </div>
+        <% } %>
+    </div>
+
+    <!-- Theme Toggle Button -->
+    <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script>
+        // --- 1. Theme Toggling ---
+        const themeBtn = document.querySelector('.theme-toggle');
+        const root = document.documentElement;
+        
+        // Load preference (Default is light, so we only check for dark)
+        if (localStorage.getItem('theme') === 'dark') {
+            root.setAttribute('data-theme', 'dark');
+            themeBtn.textContent = '☀️';
+        } else {
+            themeBtn.textContent = '🌙';
+        }
+
+        function toggleTheme() {
+            if (root.getAttribute('data-theme') === 'light') {
+                root.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+                themeBtn.textContent = '☀️';
+            } else {
+                root.setAttribute('data-theme', 'light');
+                localStorage.setItem('theme', 'light');
+                themeBtn.textContent = '🌙';
+            }
+        }
+
+        // --- 2. Toast Notifications ---
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.textContent = message;
+            
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.animation = 'slideInRight 0.3s ease-out reverse forwards';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // --- 3. AJAX Form Submission with Skeletons ---
+        const form = document.getElementById('urlForm');
+        const submitBtn = document.getElementById('submitBtn');
+
+        form.addEventListener('submit', async (e) => {
+            // We intercept the form so we can show Skeletons and Toasts!
+            e.preventDefault();
+            
+            const url = document.getElementById('url').value;
+            const customAlias = document.getElementById('customAlias').value;
+
+            // Change button state
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Generating...';
+            submitBtn.disabled = true;
+
+            try {
+                const response = await fetch('/url', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json' // Tell server we want JSON back!
+                    },
+                    body: JSON.stringify({ url, customAlias })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    showToast(data.error || "An error occurred", "error");
+                } else {
+                    showToast("Link created successfully!", "success");
+                    // Reload page to show new link naturally (or we could DOM inject)
+                    setTimeout(() => window.location.reload(), 1000);
+                }
+            } catch (err) {
+                showToast("Network error", "error");
+            } finally {
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            }
+        });
+
+        // Trigger toast if loaded with a successful creation
+        const hasId = "<%= locals.id ? 'true' : '' %>";
+        const hasError = "<%= locals.error ? 'true' : '' %>";
+        
+        if (hasId && !hasError) {
+            showToast("Successfully generated short link!", "success");
+        }
+    </script>
+</body>
 </html>

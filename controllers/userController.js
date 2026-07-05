@@ -1,38 +1,42 @@
-const User = require("../models/user")
-const { v4: uuidv4 } = require("uuid")
-const { setUser } = require("../servics/auth")
+const supabase = require("../supabaseClient");
+const { v4: uuidv4 } = require("uuid");
+const { setUser } = require("../servics/auth");
+
 ////////////////////////// Handle User Signup
 async function handleUserSignup(req, res) {
+    const { firstName, lastName, email, password } = req.body;
+    
+    const { error } = await supabase
+        .from("users")
+        .insert([{ firstName, lastName, email, password }]);
 
-    const { firstName, lastName, email, password } = req.body
-    await User.create({
-        firstName,
-        lastName,
-        email,
-        password,
-
-    });
-    return res.redirect("/")
+    if (error) {
+        console.error("Signup error:", error);
+    }
+    return res.redirect("/");
 }
+
 //////////////////////////// Handle User Login
 async function handleUserLogin(req, res) {
+    const { email, password } = req.body;
+    
+    const { data: user, error } = await supabase
+        .from("users")
+        .select("*")
+        .eq("email", email)
+        .eq("password", password)
+        .single();
 
-    const { email, password } = req.body
-    const user = await User.findOne({
-        email,
-        password,
-    });
-    console.log("user", user);
-    if (!user) {
+    if (!user || error) {
         return res.status(400).json({ error: "Invalid email or password" });
     }
 
     const token = setUser(user);
-    res.cookie("uid", token)
-    return res.redirect("/")
+    res.cookie("uid", token);
+    return res.redirect("/");
 }
 
 module.exports = {
     handleUserSignup,
     handleUserLogin,
-}
+};

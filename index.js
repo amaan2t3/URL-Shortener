@@ -1,42 +1,42 @@
 require("dotenv").config();
-////////////////// Expresss
 const express = require("express");
 const app = express();
 const PORT = process.env.PORT || 8000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-/////////////////////////// Connect MongoDB
-const { connectToMongoDB } = require("./connectMD");
-connectToMongoDB(process.env.MONGODB_URI).then(() =>
-    console.log("Mongodb Connected"),
-);
-// Import URL Model
-const URL = require("./models/url");
-
-/////////////////////// Import all Route
 const urlRoute = require("./routes/urlRoute");
 const staticRouter = require("./routes/staticRouter");
-const userRoute = require("./routes/userRoute")
+const userRoute = require("./routes/userRoute");
 
-// Import Path and Cookies
 const path = require("path");
-
 const cookieParser = require("cookie-parser");
+const rateLimit = require("express-rate-limit");
 
 app.use(cookieParser());
 
-// Import Auth Middleware
+// Global Rate Limiting: max 100 requests per 15 minutes per IP
+const globalLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 100,
+    message: { error: "Too many requests from this IP, please try again after 15 minutes." }
+});
+app.use(globalLimiter);
+
+// Specific Rate Limiting for URL Creation (e.g., max 10 URLs per 15 minutes)
+const createUrlLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 20,
+    message: { error: "You have reached the maximum number of URLs allowed per 15 minutes." }
+});
+
 const { restrictToLoginUserOnly, checkUserLogin } = require("./middlewares/auth");
 
-//////// ejs
 app.set("view engine", "ejs");
 app.set("views", path.resolve("./views"));
 
-
-/////////////////// alll Routes
 app.use("/", checkUserLogin, staticRouter);
-app.use("/url", restrictToLoginUserOnly, urlRoute);
+app.use("/url", restrictToLoginUserOnly, createUrlLimiter, urlRoute);
 app.use("/user", userRoute);
 
 app.listen(PORT, () => console.log(`Server Started at PORT:${PORT}`));
