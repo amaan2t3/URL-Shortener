@@ -26,4 +26,10 @@ router.get("/login", (req, res) => {
     return res.render("login");
 });
 
+////////////////// Logout Route
+router.get("/logout", (req, res) => {
+    res.clearCookie("uid");
+    return res.redirect("/login");
+});
+
 module.exports = router;

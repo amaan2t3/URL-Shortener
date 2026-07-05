@@ -329,8 +329,12 @@
     <!-- Navigation -->
     <div class="navbar">
         <a href="/">🏠 Home</a>
-        <a href="/login">🔐 Login</a>
-        <a href="/signup">📝 Signup</a>
+        <% if (locals.user) { %>
+            <a href="/logout" style="background: var(--error); color: white;">🚪 Logout</a>
+        <% } else { %>
+            <a href="/login">🔐 Login</a>
+            <a href="/signup">📝 Signup</a>
+        <% } %>
     </div>
 
     <div class="container">

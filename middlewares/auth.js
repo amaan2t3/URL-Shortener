@@ -28,6 +28,7 @@ async function restrictToLoginUserOnly(req, res, next) {
     }
     
     req.user = user;
+    res.locals.user = user; // Make user available to EJS templates
     return next();
 }
 
@@ -37,6 +38,7 @@ async function checkUserLogin(req, res, next) {
 
     const user = getUser(userUid);
     req.user = user;
+    res.locals.user = user; // Make user available to EJS templates
     return next();
 }
 
