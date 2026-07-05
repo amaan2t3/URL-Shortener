@@ -1,5 +1,4 @@
 const supabase = require("../supabaseClient");
-const { v4: uuidv4 } = require("uuid");
 const { setUser } = require("../servics/auth");
 
 ////////////////////////// Handle User Signup
